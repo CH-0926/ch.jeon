@@ -20,28 +20,28 @@ static void test_convert_bytes_to_kb(void **state)
 {
     UNUSED(state);
     double result = convert_bytes(244527104, "KB");
-    assert_float_equal(result, 238796.00, 0.01);
+    assert_float_equal(result, 238796.000, 0.01);
 }
 
 static void test_convert_bytes_to_mb(void **state)
 {
     UNUSED(state);
     double result = convert_bytes(244527104, "MB");
-    assert_float_equal(result, 233.20, 0.01);
+    assert_float_equal(result, 233.200, 0.01);
 }
 
 static void test_convert_bytes_to_gb(void **state)
 {
     UNUSED(state);
     double result = convert_bytes(244527104, "GB");
-    assert_float_equal(result, 0.23, 0.01);
+    assert_float_equal(result, 0.230, 0.01);
 }
 
 static void test_convert_bytes_to_tb(void **state)
 {
     UNUSED(state);
     double result = convert_bytes(244527104, "TB");
-    assert_float_equal(result, 0.00023, 0.00001);
+    assert_float_equal(result, 0.000230, 0.00001);
 }
 
 int main(void)
