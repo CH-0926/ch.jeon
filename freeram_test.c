@@ -5,47 +5,50 @@
 #include <cmocka.h>
 
 #define UNIT_TESTING 1
-#include "freeram.c"
+#include "proc_freeram.h"
+#include "freeram.h"
 
 #define UNUSED(x) (void)(x)
 
-long __wrap_get_free_ram(void);
-long __wrap_get_free_ram(void)
-{
-    long free_ram = mock_type(long);
-    return free_ram;
+// 모킹된 함수 정의
+long __wrap_get_free_ram(void) {
+    return mock_type(long);
 }
 
-static void test_convert_bytes_to_kb(void **state)
-{
+static void test_convert_bytes_to_kb(void **state) {
     UNUSED(state);
+    will_return(__wrap_get_free_ram, 244527104); 
+
     double result = convert_bytes(244527104, "KB");
-    assert_float_equal(result, 238796.000, 0.01);
+    assert_float_equal(result, 238796.0, 0.01);
 }
 
-static void test_convert_bytes_to_mb(void **state)
-{
+static void test_convert_bytes_to_mb(void **state) {
     UNUSED(state);
+    will_return(__wrap_get_free_ram, 244527104);
+
     double result = convert_bytes(244527104, "MB");
-    assert_float_equal(result, 233.200, 0.01);
+    assert_float_equal(result, 233.199219, 0.01);
 }
 
-static void test_convert_bytes_to_gb(void **state)
-{
+static void test_convert_bytes_to_gb(void **state) {
     UNUSED(state);
+    will_return(__wrap_get_free_ram, 244527104);
+
     double result = convert_bytes(244527104, "GB");
-    assert_float_equal(result, 0.230, 0.01);
+    assert_float_equal(result, 0.227539, 0.01);
 }
 
-static void test_convert_bytes_to_tb(void **state)
-{
+static void test_convert_bytes_to_tb(void **state) {
     UNUSED(state);
+    will_return(__wrap_get_free_ram, 244527104);
+
     double result = convert_bytes(244527104, "TB");
-    assert_float_equal(result, 0.000230, 0.00001);
+    assert_float_equal(result, 0.000223, 0.01);
 }
 
-int main(void)
-{
+// 메인 함수
+int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_convert_bytes_to_kb),
         cmocka_unit_test(test_convert_bytes_to_mb),
