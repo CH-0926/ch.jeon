@@ -1,0 +1,3 @@
+/home/user/github/ch.jeon/build/CMakeFiles/freeram_test.dir
+/home/user/github/ch.jeon/build/CMakeFiles/edit_cache.dir
+/home/user/github/ch.jeon/build/CMakeFiles/rebuild_cache.dir

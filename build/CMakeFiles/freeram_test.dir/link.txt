@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/freeram_test.dir/freeram_test.c.o CMakeFiles/freeram_test.dir/freeram.c.o CMakeFiles/freeram_test.dir/proc_freeram.c.o -o freeram_test  -lcmocka 
