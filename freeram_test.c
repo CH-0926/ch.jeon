@@ -6,7 +6,7 @@
 
 #define UNIT_TESTING 1
 #include "proc_freeram.h"
-#include "freeram.h"
+#include "freeram.c"
 
 #define UNUSED(x) (void)(x)
 
@@ -17,33 +17,37 @@ long __wrap_get_free_ram(void) {
 
 static void test_convert_bytes_to_kb(void **state) {
     UNUSED(state);
-    will_return(__wrap_get_free_ram, 244527104); 
+    will_return(__wrap_get_free_ram, 244527104);
+    long free_ram = __wrap_get_free_ram();
 
-    double result = convert_bytes(244527104, "KB");
+    double result = convert_bytes(free_ram, "KB");
     assert_float_equal(result, 238796.0, 0.01);
 }
 
 static void test_convert_bytes_to_mb(void **state) {
     UNUSED(state);
     will_return(__wrap_get_free_ram, 244527104);
+    long free_ram = __wrap_get_free_ram();
 
-    double result = convert_bytes(244527104, "MB");
+    double result = convert_bytes(free_ram, "MB");
     assert_float_equal(result, 233.199219, 0.01);
 }
 
 static void test_convert_bytes_to_gb(void **state) {
     UNUSED(state);
     will_return(__wrap_get_free_ram, 244527104);
+    long free_ram = __wrap_get_free_ram();
 
-    double result = convert_bytes(244527104, "GB");
+    double result = convert_bytes(free_ram, "GB");
     assert_float_equal(result, 0.227539, 0.01);
 }
 
 static void test_convert_bytes_to_tb(void **state) {
     UNUSED(state);
     will_return(__wrap_get_free_ram, 244527104);
+    long free_ram = __wrap_get_free_ram();
 
-    double result = convert_bytes(244527104, "TB");
+    double result = convert_bytes(free_ram, "TB");
     assert_float_equal(result, 0.000223, 0.01);
 }
 
