@@ -43,7 +43,10 @@
 
 2. 테스트 코드를 컴파일하고 실행합니다:
    ```
-   gcc -o freeram_test proc_freeram.c freeram_test.c -lcmocka
+   mkdir build
+   cd build
+   cmake ..
+   make
    ./freeram_test
    ```
 
