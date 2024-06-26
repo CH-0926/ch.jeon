@@ -6,7 +6,7 @@
 
 #define UNIT_TESTING 1
 #include "proc_freeram.h"
-#include "freeram.h"
+#include "freeram.c"
 
 #define UNUSED(x) (void)(x)
 
