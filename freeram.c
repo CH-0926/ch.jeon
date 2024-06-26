@@ -3,9 +3,7 @@
 #include "proc_freeram.h"
 #include "freeram.h"
 
-double convert_bytes(long bytes, const char *unit) {    
-    long free_ram = __wrap_get_free_ram();
-
+double convert_bytes(long bytes, const char *unit) {
     if (unit == NULL) {
         return -1.0;
     }
@@ -46,5 +44,4 @@ double convert_bytes(long bytes, const char *unit) {
 
 //     return 0;
 // }
-
 // #endif /* UNIT_TESTING */
