@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
+
+# 프로젝트 설정
 project(freeram_project C)
 
+# C 표준 설정
 set(CMAKE_C_STANDARD 99)
 
 # CMocka 라이브러리 경로 설정

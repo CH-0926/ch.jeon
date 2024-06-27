@@ -31,7 +31,7 @@ int main() {
         printf("Free RAM: %ld bytes\n", free_ram);
     }
 
-    // Example usage of convert_bytes function
+    // convert_bytes 함수의 예시 사용법
     double free_ram_kb = convert_bytes(free_ram, "KB");
     double free_ram_mb = convert_bytes(free_ram, "MB");
     double free_ram_gb = convert_bytes(free_ram, "GB");
