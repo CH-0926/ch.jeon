@@ -1,47 +1,45 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "proc_freeram.h"
 #include "freeram.h"
+#include <unistd.h>
 
-double convert_bytes(long bytes, const char *unit) {
-    if (unit == NULL) {
-        return -1.0;
+static char *convert_bytes(void) {
+    long free_ram = get_free_ram();
+    if (free_ram == -1) {
+        printf("Failed to read freeram\n");
+        return NULL; // 프로그램 종료
     }
 
-    if (strcmp(unit, "KB") == 0) {
-        return bytes / 1024.0;
-    } else if (strcmp(unit, "MB") == 0) {
-        return bytes / (1024.0 * 1024.0);
-    } else if (strcmp(unit, "GB") == 0) {
-        return bytes / (1024.0 * 1024.0 * 1024.0);
-    } else if (strcmp(unit, "TB") == 0) {
-        return bytes / (1024.0 * 1024.0 * 1024.0 * 1024.0);
-    } else {
-        return bytes;
-    }
+    char buf[1024] = {0};
+    ssize_t pos = 0;
+    
+    double byte_KB = free_ram / 1024.0;
+    double byte_MB = byte_KB / 1024.0;
+    double byte_GB = byte_MB / 1024.0;
+    double byte_TB = byte_GB / 1024.0;
+
+    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %ld bytes\n", free_ram);
+    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f KB\n", byte_KB);
+    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f MB\n", byte_MB);
+    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f GB\n", byte_GB);
+    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f TB\n", byte_TB);
+
+    return strdup(buf);
 }
 
 #ifndef UNIT_TESTING
 int main() {
-    long free_ram = get_free_ram();
-    if (free_ram == -1) {
-        printf("Failed to retrieve free RAM\n");
-        return 1; // 프로그램 종료
-    } else {
-        printf("Free RAM: %ld bytes\n", free_ram);
+    char *free_ram_str = NULL;
+    free_ram_str = convert_bytes();
+    if (free_ram_str == NULL) {
+        fprintf(stderr, "Failed to read freeram\n");
+        return 1;
     }
 
-    // Example usage of convert_bytes function
-    double free_ram_kb = convert_bytes(free_ram, "KB");
-    double free_ram_mb = convert_bytes(free_ram, "MB");
-    double free_ram_gb = convert_bytes(free_ram, "GB");
-    double free_ram_tb = convert_bytes(free_ram, "TB");
-
-    printf("Free RAM: %.3f KB\n", free_ram_kb);
-    printf("Free RAM: %.3f MB\n", free_ram_mb);
-    printf("Free RAM: %.3f GB\n", free_ram_gb);
-    printf("Free RAM: %.3f TB\n", free_ram_tb);
-
+    printf("%s", free_ram_str);
+    free(free_ram_str); // strdup() 함수를 사용하여 동적으로 메모리를 할당, 메모리 누수 발생
     return 0;
 }
 #endif /* UNIT_TESTING */

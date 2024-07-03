@@ -12,9 +12,9 @@ long get_free_ram() {
     char line[256];
     long free_ram = -1;
     while (fgets(line, sizeof(line), file)) {
-        if (sscanf(line, "MemFree: %ld kB", &free_ram) == 1) {
+        if (sscanf(line, "MemFree: %ld byte", &free_ram) == 1) {
             fclose(file);
-            return free_ram * 1024; // Convert kB to bytes
+            return free_ram ; 
         }
     }
 
