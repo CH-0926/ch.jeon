@@ -5,8 +5,8 @@
 #include "freeram.h"
 #include <unistd.h>
 
-static char *convert_bytes(void) {
-    long free_ram = get_free_ram();
+char *convert_bytes(void) {
+    long free_ram = get_free_ram("/proc/meminfo");
     if (free_ram == -1) {
         printf("Failed to read freeram\n");
         return NULL; // 프로그램 종료
@@ -14,13 +14,13 @@ static char *convert_bytes(void) {
 
     char buf[1024] = {0};
     ssize_t pos = 0;
-    
-    double byte_KB = free_ram / 1024.0;
+    double byte_BT = free_ram * 1024;
+    double byte_KB = free_ram;
     double byte_MB = byte_KB / 1024.0;
     double byte_GB = byte_MB / 1024.0;
     double byte_TB = byte_GB / 1024.0;
 
-    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %ld bytes\n", free_ram);
+    pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f bytes\n", byte_BT);
     pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f KB\n", byte_KB);
     pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f MB\n", byte_MB);
     pos += snprintf(buf + pos, sizeof(buf) - pos, "Freeram: %.2f GB\n", byte_GB);
