@@ -13,6 +13,8 @@
 // 모킹된 함수 정의
 long __wrap_get_free_ram(const char *meminfo_path) {
     UNUSED(meminfo_path);
+    check_expected_ptr(meminfo_path);
+
     return mock_type(long);
 }
 
@@ -23,8 +25,7 @@ static void test_convert_bytes(void **state) {
 
     UNUSED(state);
 
-    expect_string(__wrap_get_free_ram, meminfo_path, "/proc/meminfo");
-
+    expect_string(__wrap_get_free_ram, meminfo_path,"/proc/meminfo");
     will_return(__wrap_get_free_ram, 238796);
     
     result = convert_bytes();
@@ -40,6 +41,7 @@ static void test_convert_bytes(void **state) {
 
     free(result);
 }
+
 int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_convert_bytes),
