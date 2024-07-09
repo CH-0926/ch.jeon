@@ -11,39 +11,53 @@
 #define UNUSED(x) (void)(x)
 
 // 모킹된 함수 정의
-long __wrap_get_free_ram(void) {
+long __wrap_get_free_ram(const char *meminfo_path) {
+   // UNUSED(meminfo_path);
+    check_expected_ptr(meminfo_path);
+
     return mock_type(long);
 }
 
-static void assert_convert_bytes(long bytes, const char *unit, double expected, double tolerance) {
-    double result = convert_bytes(bytes, unit);
-    assert_float_equal(result, expected, tolerance);
-}
+static void test_fail_convert_bytes(void **state) {
+     UNUSED(state);
 
-//Unit test get_free_ram
-static void test_get_free_ram(void **state) {
-    UNUSED(state);
+    expect_string(__wrap_get_free_ram, meminfo_path,"/proc/meminfo");
+    will_return(__wrap_get_free_ram, -1);
+    
+    char *result = convert_bytes();
+    assert_null(result);
 
-    will_return(__wrap_get_free_ram, 244527104);
-    long free_ram = __wrap_get_free_ram();
+    free(result);
+};
 
-    assert_int_equal(free_ram, 244527104);
-}
 //Unit test convert_bytes
-static void test_convert_bytes(void **state) {
-    UNUSED(state);
-    will_return(__wrap_get_free_ram, 244527104);
-    long free_ram = __wrap_get_free_ram();
+static void test_success_convert_bytes(void **state) {
+    
+    char *result = NULL;
 
-    assert_convert_bytes(free_ram, "KB", 238796.0, 0.01);
-    assert_convert_bytes(free_ram, "MB", 233.199219, 0.01);
-    assert_convert_bytes(free_ram, "GB", 0.227539, 0.01);
-    assert_convert_bytes(free_ram, "TB", 0.000223, 0.01);
+    UNUSED(state);
+
+    expect_string(__wrap_get_free_ram, meminfo_path,"/proc/meminfo");
+    will_return(__wrap_get_free_ram, 238796);
+    
+    result = convert_bytes();
+    const char *expected_output =
+        "Freeram: 244527104.00 bytes\n"
+        "Freeram: 238796.00 KB\n"
+        "Freeram: 233.20 MB\n"
+        "Freeram: 0.23 GB\n"
+        "Freeram: 0.00 TB\n";
+
+    assert_non_null(result);
+    assert_string_equal(result, expected_output);
+
+    free(result);
 }
+
 int main(void) {
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_get_free_ram),
-        cmocka_unit_test(test_convert_bytes),
+        cmocka_unit_test(test_fail_convert_bytes),
+        cmocka_unit_test(test_success_convert_bytes),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

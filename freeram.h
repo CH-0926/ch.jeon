@@ -1,6 +1,6 @@
 #ifndef FREERAM_H
 #define FREERAM_H
 
-double convert_bytes(long bytes, const char *unit);
+char *convert_bytes(void);
 
 #endif // FREERAM_H
